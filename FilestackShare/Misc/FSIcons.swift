@@ -30,37 +30,37 @@ struct FSIcons {
 
     static var iconExport: UIImage {
         get {
-            return UIImage(named: "icon-export")!.imageWithRenderingMode(.AlwaysTemplate)
+            return UIImage(named: "icon-export")!.withRenderingMode(.alwaysTemplate)
         }
     }
 
     static var iconDownload: UIImage {
         get {
-            return UIImage(named: "icon-download")!.imageWithRenderingMode(.AlwaysTemplate)
+            return UIImage(named: "icon-download")!.withRenderingMode(.alwaysTemplate)
         }
     }
 
     static var iconShare: UIImage {
         get {
-            return UIImage(named: "icon-share")!.imageWithRenderingMode(.AlwaysTemplate)
+            return UIImage(named: "icon-share")!.withRenderingMode(.alwaysTemplate)
         }
     }
 
     static var iconTrash: UIImage {
         get {
-            return UIImage(named: "icon-trash")!.imageWithRenderingMode(.AlwaysTemplate)
+            return UIImage(named: "icon-trash")!.withRenderingMode(.alwaysTemplate)
         }
     }
 
     static var iconLink: UIImage {
         get {
-            return UIImage(named: "icon-link")!.imageWithRenderingMode(.AlwaysTemplate)
+            return UIImage(named: "icon-link")!.withRenderingMode(.alwaysTemplate)
         }
     }
 
     static var iconCancel: UIImage {
         get {
-            return UIImage(named: "icon-cancel")!.imageWithRenderingMode(.AlwaysTemplate)
+            return UIImage(named: "icon-cancel")!.withRenderingMode(.alwaysTemplate)
         }
     }
 }

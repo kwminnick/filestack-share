@@ -12,9 +12,9 @@ import UIKit
 extension UIAlertController {
 
     convenience init(title: String?, message: String?, progressView: UIProgressView?) {
-        self.init(title: title, message: message, preferredStyle: .Alert)
+        self.init(title: title, message: message, preferredStyle: .alert)
 
-        setupProgressView(progressView)
+        setupProgressView(progressView: progressView)
     }
 
     private func setupProgressView(progressView: UIProgressView?) {
@@ -33,6 +33,6 @@ extension UIAlertController {
         progressView.centerXToItem(view, constant: 0)
         progressView.centerYToItem(view, constant: 10)
 
-        view.bringSubviewToFront(progressView)
+        view.bringSubview(toFront: progressView)
     }
 }

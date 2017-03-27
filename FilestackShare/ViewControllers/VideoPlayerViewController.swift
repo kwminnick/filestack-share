@@ -17,6 +17,6 @@ class VideoPlayerViewController: AVPlayerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.player = AVPlayer(URL: NSURL(string: videoURL)!)
+        self.player = AVPlayer(url: URL(string: videoURL)!)
     }
 }

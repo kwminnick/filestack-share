@@ -28,8 +28,8 @@ import XLActionController
 final class FSActionCell: ActionCell {
 
     lazy var animatableBackgroundView: UIView = { [weak self] in
-        let view = UIView(frame: self?.frame ?? CGRectZero)
-        view.backgroundColor = UIColor.redColor().colorWithAlphaComponent(0.40)
+        let view = UIView(frame: self?.frame ?? CGRect.zero)
+        view.backgroundColor = UIColor.red.withAlphaComponent(0.40)
         return view
         }()
 
@@ -51,45 +51,45 @@ final class FSActionCell: ActionCell {
         backgroundColor = FSColor.darkGrey
         actionTitleLabel?.textColor = FSColor.lightGrey
         let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.0)
+        backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.0)
         backgroundView.addSubview(animatableBackgroundView)
         selectedBackgroundView = backgroundView
     }
 
-    override var highlighted: Bool {
+    override var isHighlighted: Bool {
         didSet {
-            if highlighted {
-                animatableBackgroundView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.0)
+            if isHighlighted {
+                animatableBackgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.0)
                 animatableBackgroundView.frame = CGRect(x: 0, y: 0, width: 30, height: frame.height)
                 animatableBackgroundView.center = CGPoint(x: frame.width * 0.5, y: frame.height * 0.5)
 
-                UIView.animateWithDuration(0.2) { [weak self] in
+                UIView.animate(withDuration: 0.2, animations: { [weak self] in
                     guard let me = self else {
                         return
                     }
 
                     me.animatableBackgroundView.frame = CGRect(x: 0, y: 0, width: me.frame.width, height: me.frame.height)
-                    me.animatableBackgroundView.backgroundColor = FSColor.lightGreen.colorWithAlphaComponent(0.4)
-                }
+                    me.animatableBackgroundView.backgroundColor = FSColor.lightGreen.withAlphaComponent(0.4)
+                }) 
             } else {
-                animatableBackgroundView.backgroundColor = animatableBackgroundView.backgroundColor?.colorWithAlphaComponent(0.0)
+                animatableBackgroundView.backgroundColor = animatableBackgroundView.backgroundColor?.withAlphaComponent(0.0)
             }
         }
     }
 }
 
 protocol FSActionViewControllerDelegate: class {
-    func copyBlobURLToClipboard(blob: Blob)
-    func shareBlob(blob: Blob)
-    func exportBlob(blob: Blob)
-    func deleteBlob(blob: Blob)
+    func copyBlobURLToClipboard(_ blob: Blob)
+    func shareBlob(_ blob: Blob)
+    func exportBlob(_ blob: Blob)
+    func deleteBlob(_ blob: Blob)
 }
 
 final class FSActionController: ActionController<FSActionCell, ActionData, UICollectionReusableView, Void, UICollectionReusableView, Void> {
     weak var delegate: FSActionViewControllerDelegate?
     weak var blob: Blob!
 
-    override init(nibName nibNameOrNil: String? = nil, bundle nibBundleOrNil: NSBundle? = nil) {
+    override init(nibName nibNameOrNil: String? = nil, bundle nibBundleOrNil: Bundle? = nil) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
 
         collectionViewLayout.minimumLineSpacing = -0.5
@@ -100,21 +100,21 @@ final class FSActionController: ActionController<FSActionCell, ActionData, UICol
         settings.animation.present.duration = 0.4
         settings.animation.dismiss.duration = 0.4
         settings.animation.dismiss.offset = 30
-        settings.animation.dismiss.options = .CurveLinear
+        settings.animation.dismiss.options = .curveLinear
 
-        cellSpec = .NibFile(nibName: "FSActionCell", bundle: NSBundle(forClass: FSActionCell.self), height: { _  in 46 })
+        cellSpec = .nibFile(nibName: "FSActionCell", bundle: Bundle(for: FSActionCell.self), height: { _  in 46 })
 
         onConfigureCellForAction = { cell, action, indexPath in
             cell.setup(action.data?.title, detail: action.data?.subtitle, image: action.data?.image)
             cell.alpha = action.enabled ? 1.0 : 0.5
             cell.actionImageView?.tintColor = FSColor.iconTint
-            cell.actionTitleLabel?.textColor = action.style == .Destructive ? FSColor.darkOrange : FSColor.textLightGrey
-            let font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
+            cell.actionTitleLabel?.textColor = action.style == .destructive ? FSColor.darkOrange : FSColor.textLightGrey
+            let font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
             cell.actionTitleLabel?.font = font
 
             // Hackity, hack, hack
             if action.data?.title != "Cancel" {
-                let separator = UIView(frame: CGRectMake(0, cell.frame.height - 1, cell.frame.width, 1))
+                let separator = UIView(frame: CGRect(x: 0, y: cell.frame.height - 1, width: cell.frame.width, height: 1))
                 separator.backgroundColor = FSColor.grey
                 cell.addSubview(separator)
             }
@@ -129,45 +129,47 @@ final class FSActionController: ActionController<FSActionCell, ActionData, UICol
         setupFilestackSheet()
     }
 
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func dismiss() {
         // NO-OP
     }
 
-    private func setupFilestackSheet() {
-        addAction(Action(ActionData(title: "Share", image: FSIcons.iconShare), style: .Default, handler: { _ in
-            self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.delegate?.shareBlob(self.blob)
-                })
+    fileprivate func setupFilestackSheet() {
+        addAction(Action(ActionData(title: "Share", image: FSIcons.iconShare), style: .default, handler: { _ in
+            DispatchQueue.main.async(execute: {
+                self.presentingViewController?.dismiss(animated: true, completion: nil)
+                self.delegate?.shareBlob(self.blob)
             })
         }))
 
-        addAction(Action(ActionData(title: "Copy Link", image: FSIcons.iconLink), style: .Default, handler: { _ in
-            self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.delegate?.copyBlobURLToClipboard(self.blob)
-                })
+        addAction(Action(ActionData(title: "Copy Link", image: FSIcons.iconLink), style: .default, handler: { _ in
+            DispatchQueue.main.async(execute: {
+                self.presentingViewController?.dismiss(animated: true, completion: nil)
+                self.delegate?.copyBlobURLToClipboard(self.blob)
             })
         }))
 
-        addAction(Action(ActionData(title: "Export", image: FSIcons.iconExport), style: .Default, handler: { _ in
-            self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.delegate?.exportBlob(self.blob)
-                })
+        addAction(Action(ActionData(title: "Export", image: FSIcons.iconExport), style: .default, handler: { _ in
+            DispatchQueue.main.async(execute: {
+                self.presentingViewController?.dismiss(animated: true, completion: nil)
+                self.delegate?.exportBlob(self.blob)
             })
         }))
 
-        addAction(Action(ActionData(title: "Delete", image: FSIcons.iconTrash), style: .Default, handler: { _ in
-            self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.delegate?.deleteBlob(self.blob)
-                })
+        addAction(Action(ActionData(title: "Delete", image: FSIcons.iconTrash), style: .default, handler: { _ in
+            DispatchQueue.main.async(execute: {
+                self.presentingViewController?.dismiss(animated: true, completion: nil)
+                self.delegate?.deleteBlob(self.blob)
             })
         }))
         
-        addAction(Action(ActionData(title: "Cancel", image: FSIcons.iconCancel), style: .Default, handler: { _ in
-            self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        addAction(Action(ActionData(title: "Cancel", image: FSIcons.iconCancel), style: .default, handler: { _ in
+            DispatchQueue.main.async(execute: {
+                self.presentingViewController?.dismiss(animated: true, completion: nil)
+            })
         }))
     }
 }

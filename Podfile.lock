@@ -21,18 +21,32 @@ PODS:
     - AFNetworking (~> 3.0)
   - FSPicker (1.0.4):
     - Filestack
-  - Nuke (3.1.1)
-  - XLActionController (2.0.0):
-    - XLActionController/Core (= 2.0.0)
-  - XLActionController/Core (2.0.0)
+  - Nuke (5.1)
+  - XLActionController (3.0.1):
+    - XLActionController/Core (= 3.0.1)
+  - XLActionController/Core (3.0.1)
 
 DEPENDENCIES:
   - Crashlytics
   - Fabric
   - Filestack
   - FSPicker
-  - Nuke
-  - XLActionController
+  - Nuke (from `https://github.com/kean/Nuke.git`)
+  - XLActionController (from `https://github.com/xmartlabs/XLActionController.git`)
+
+EXTERNAL SOURCES:
+  Nuke:
+    :git: https://github.com/kean/Nuke.git
+  XLActionController:
+    :git: https://github.com/xmartlabs/XLActionController.git
+
+CHECKOUT OPTIONS:
+  Nuke:
+    :commit: a83d741e8f6c9d11334432f9a644aff0f1705f5a
+    :git: https://github.com/kean/Nuke.git
+  XLActionController:
+    :commit: 5ce0786dc3c0be66c047a88d5931e97e96d5e3da
+    :git: https://github.com/xmartlabs/XLActionController.git
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
@@ -40,9 +54,9 @@ SPEC CHECKSUMS:
   Fabric: caf7580c725e64db144f610ac65cd60956911dc7
   Filestack: 5a50fc401ae20533bf79d95dbe7863f05415cfed
   FSPicker: 90241a011bad55b9c20b0a113354ef52ad85580e
-  Nuke: 75fb602d879372a68679293fdfbd758a1769880d
-  XLActionController: 97ed31237413db4d9401c6a559270f4d2b4de136
+  Nuke: d4ef240ac9102c9d1de3e613cb4f58f9547796c9
+  XLActionController: 57fe0ce1642e2eed971b188b490762345fdbf963
 
-PODFILE CHECKSUM: 2e1e94425b6ccf808ef4a8ba5a867df248ebe151
+PODFILE CHECKSUM: 9bedc0c764db0f8e67a531069fef5163a56fa897
 
-COCOAPODS: 1.0.0
+COCOAPODS: 1.2.0

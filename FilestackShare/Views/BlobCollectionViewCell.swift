@@ -9,16 +9,16 @@
 import UIKit
 
 enum BlobCellType {
-    case Unknown
-    case Image
-    case Video
-    case File
+    case unknown
+    case image
+    case video
+    case file
 }
 
 class BlobCollectionViewCell: UICollectionViewCell {
 
-    private let barLabelHeight: CGFloat = 24.0
-    private var blackBar: UIView?
+    fileprivate let barLabelHeight: CGFloat = 24.0
+    fileprivate var blackBar: UIView?
     var moreButton: UIButton?
     var blobLabel: UILabel?
     var imageView: UIImageView?
@@ -27,22 +27,22 @@ class BlobCollectionViewCell: UICollectionViewCell {
     var type: BlobCellType {
         didSet {
             switch type {
-            case .File:
-                self.imageView?.contentMode = .Center
+            case .file:
+                self.imageView?.contentMode = .center
                 self.imageView?.image = FSIcons.iconFile
-            case .Image:
-                self.imageView?.contentMode = .ScaleToFill
-            case .Video:
-                self.imageView?.contentMode = .Center
+            case .image:
+                self.imageView?.contentMode = .scaleToFill
+            case .video:
+                self.imageView?.contentMode = .center
                 self.imageView?.image = FSIcons.iconVideo
             default:
-                self.imageView?.contentMode = .ScaleToFill
+                self.imageView?.contentMode = .scaleToFill
             }
         }
     }
 
     override init(frame: CGRect) {
-        self.type = .Unknown
+        self.type = .unknown
         super.init(frame: frame)
 
         setupImageView()
@@ -55,13 +55,13 @@ class BlobCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupBlobLabel() {
+    fileprivate func setupBlobLabel() {
         blobLabel = UILabel()
-        let font = UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)
-        blobLabel?.textAlignment = .Left
+        let font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        blobLabel?.textAlignment = .left
         blobLabel?.translatesAutoresizingMaskIntoConstraints = false
         blobLabel?.font = font
-        blobLabel?.textColor = UIColor.whiteColor()
+        blobLabel?.textColor = UIColor.white
 
         self.addSubview(blobLabel!)
 
@@ -71,9 +71,9 @@ class BlobCollectionViewCell: UICollectionViewCell {
         blobLabel?.bottomConstraintToItem(self, constant: 0)
     }
 
-    private func setupBlackBar() {
+    fileprivate func setupBlackBar() {
         blackBar = UIView()
-        blackBar?.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
+        blackBar?.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         blackBar?.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(blackBar!)
@@ -84,10 +84,10 @@ class BlobCollectionViewCell: UICollectionViewCell {
         blackBar?.bottomConstraintToItem(self, constant: 0)
     }
 
-    private func setupMoreButton() {
+    fileprivate func setupMoreButton() {
         let moreIcon = FSIcons.iconMore
-        moreButton = UIButton(frame: CGRectMake(0, 0, barLabelHeight, barLabelHeight))
-        moreButton?.setImage(moreIcon, forState: .Normal)
+        moreButton = UIButton(frame: CGRect(x: 0, y: 0, width: barLabelHeight, height: barLabelHeight))
+        moreButton?.setImage(moreIcon, for: UIControlState())
         moreButton?.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(moreButton!)
@@ -98,7 +98,7 @@ class BlobCollectionViewCell: UICollectionViewCell {
         moreButton?.rightConstraintToItem(self, constant: -5)
     }
 
-    private func setupImageView() {
+    fileprivate func setupImageView() {
         imageView = UIImageView()
         imageView?.backgroundColor = FSColor.darkGrey
         imageView?.tintColor = FSColor.iconTint

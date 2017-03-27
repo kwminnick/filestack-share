@@ -11,13 +11,13 @@ import Nuke
 
 final class ImageFullScreenViewController: UIViewController {
 
-    private let imageView = UIImageView()
-    private let scrollView = UIScrollView()
-    private let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .White)
-    private var imageViewTopConstraint: NSLayoutConstraint!
-    private var imageViewBottomConstraint: NSLayoutConstraint!
-    private var imageViewTrailingConstraint: NSLayoutConstraint!
-    private var imageViewLeadingConstraint: NSLayoutConstraint!
+    fileprivate let imageView = UIImageView()
+    fileprivate let scrollView = UIScrollView()
+    fileprivate let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+    fileprivate var imageViewTopConstraint: NSLayoutConstraint!
+    fileprivate var imageViewBottomConstraint: NSLayoutConstraint!
+    fileprivate var imageViewTrailingConstraint: NSLayoutConstraint!
+    fileprivate var imageViewLeadingConstraint: NSLayoutConstraint!
     var imageURL: String?
 
     override func viewDidLoad() {
@@ -35,7 +35,7 @@ final class ImageFullScreenViewController: UIViewController {
         updateConstraintsForSize(view.bounds.size)
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         navigationController?.setNavigationBarHidden(true, animated: true)
@@ -48,11 +48,11 @@ final class ImageFullScreenViewController: UIViewController {
         updateMinZoomScaleForSize(view.bounds.size)
     }
 
-    private func setupActivityIndicator() {
+    fileprivate func setupActivityIndicator() {
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(activityIndicator)
-        view.bringSubviewToFront(activityIndicator)
+        view.bringSubview(toFront: activityIndicator)
 
         activityIndicator.constraintWidth(30)
         activityIndicator.constraintHeight(30)
@@ -62,7 +62,7 @@ final class ImageFullScreenViewController: UIViewController {
         activityIndicator.startAnimating()
     }
 
-    private func setupScrollView() {
+    fileprivate func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.maximumZoomScale = 5
         scrollView.delegate = self
@@ -73,40 +73,40 @@ final class ImageFullScreenViewController: UIViewController {
         scrollView.spreadOutOnView(view)
     }
 
-    private func setupImageView() {
+    fileprivate func setupImageView() {
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
         scrollView.addSubview(imageView)
 
         imageViewBottomConstraint = NSLayoutConstraint(item: imageView,
-                                                       attribute: .Bottom,
-                                                       relatedBy: .Equal,
+                                                       attribute: .bottom,
+                                                       relatedBy: .equal,
                                                        toItem: scrollView,
-                                                       attribute: .Bottom,
+                                                       attribute: .bottom,
                                                        multiplier: 1,
                                                        constant: 0)
 
         imageViewTopConstraint = NSLayoutConstraint(item: imageView,
-                                                    attribute: .Top,
-                                                    relatedBy: .Equal,
+                                                    attribute: .top,
+                                                    relatedBy: .equal,
                                                     toItem: scrollView,
-                                                    attribute: .Top,
+                                                    attribute: .top,
                                                     multiplier: 1,
                                                     constant: 0)
 
         imageViewLeadingConstraint = NSLayoutConstraint(item: imageView,
-                                                        attribute: .Left,
-                                                        relatedBy: .Equal,
+                                                        attribute: .left,
+                                                        relatedBy: .equal,
                                                         toItem: scrollView,
-                                                        attribute: .Left,
+                                                        attribute: .left,
                                                         multiplier: 1,
                                                         constant: 0)
 
         imageViewTrailingConstraint = NSLayoutConstraint(item: imageView,
-                                                         attribute: .Right,
-                                                         relatedBy: .Equal,
+                                                         attribute: .right,
+                                                         relatedBy: .equal,
                                                          toItem: scrollView,
-                                                         attribute: .Right,
+                                                         attribute: .right,
                                                          multiplier: 1,
                                                          constant: 0)
 
@@ -115,18 +115,22 @@ final class ImageFullScreenViewController: UIViewController {
             imageViewBottomConstraint,
             imageViewLeadingConstraint,
             imageViewTrailingConstraint])
+        
+        let cts = CancellationTokenSource()
+        let request = Request(url: URL(string: imageURL!)!)
 
-        Nuke.taskWith(NSURL(string: imageURL!)!) { (response) in
+        Loader.shared.loadImage(with: request, token: cts.token) { (Image) in
             self.activityIndicator.stopAnimating()
-            if let image = response.image {
-                self.imageView.image = image
+            if (Image.value != nil) {
+                self.imageView.image = Image.value
                 self.updateMinZoomScaleForSize(self.view.bounds.size)
                 self.updateConstraintsForSize(self.view.bounds.size)
             }
-        }.resume()
+        }
+        cts.cancel()
     }
 
-    private func updateMinZoomScaleForSize(size: CGSize) {
+    fileprivate func updateMinZoomScaleForSize(_ size: CGSize) {
         let minScale: CGFloat
 
         if (Int(imageView.bounds.width) == 0 || Int(imageView.bounds.height) == 0) {
@@ -147,7 +151,7 @@ final class ImageFullScreenViewController: UIViewController {
         scrollView.zoomScale = minScale
     }
 
-    private func updateConstraintsForSize(size: CGSize) {
+    fileprivate func updateConstraintsForSize(_ size: CGSize) {
         let yOffset = Int(imageView.bounds.height) == 0 ? 0.0 : max(0, (size.height - imageView.frame.height) / 2)
         let xOffset = Int(imageView.bounds.width) == 0 ? 0.0 : max(0, (size.width - imageView.frame.width) / 2)
 
@@ -161,18 +165,18 @@ final class ImageFullScreenViewController: UIViewController {
     }
 
     func dismissFullScreen() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
 
 }
 
 extension ImageFullScreenViewController: UIScrollViewDelegate {
 
-    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
 
-    func scrollViewDidZoom(scrollView: UIScrollView) {
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
         updateConstraintsForSize(view.bounds.size)
     }
 }

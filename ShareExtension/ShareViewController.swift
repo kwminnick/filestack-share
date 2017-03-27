@@ -47,23 +47,23 @@ final class ShareViewController: UIViewController {
     }
 
     private func displayProgressAlert() {
-        progressView = UIProgressView(progressViewStyle: .Default)
+        progressView = UIProgressView(progressViewStyle: .default)
 
         let progressAlert = UIAlertController(title: "Filestack Share", message: "Uploading\n", progressView: progressView)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
             self.cancelRequest()
         }
 
         progressAlert.addAction(cancelAction)
 
-        dispatch_async(dispatch_get_main_queue()) {
-            self.presentViewController(progressAlert, animated: true, completion: nil)
+        DispatchQueue.global(qos: .background).async {
+            self.present(progressAlert, animated: true, completion: nil)
         }
 
     }
 
     private func rotateAndUploadImage() {
-        itemProvider.loadItemForTypeIdentifier(contentType!, options: nil) { (item, error) in
+        itemProvider.loadItem(forTypeIdentifier: contentType!, options: nil) { (item, error) in
             guard let itemURL = item as? NSURL else {
                 self.cancelRequest()
                 return
@@ -75,12 +75,12 @@ final class ShareViewController: UIViewController {
             let rotatedImage = image?.fixRotation()
             let imageData = UIImageJPEGRepresentation(rotatedImage!, 0.95)
 
-            self.uploadData(imageData!)
+            self.uploadData(data: imageData! as NSData)
         }
     }
 
     private func uploadDataItem() {
-        itemProvider.loadItemForTypeIdentifier(contentType!, options: nil) { (item, error) in
+        itemProvider.loadItem(forTypeIdentifier: contentType!, options: nil) { (item, error) in
             guard let itemURL = item as? NSURL else {
                 self.cancelRequest()
                 return
@@ -88,12 +88,12 @@ final class ShareViewController: UIViewController {
 
             self.fileName = itemURL.lastPathComponent ?? ""
 
-            guard let itemData = NSData(contentsOfURL: itemURL) else {
+            guard let itemData = NSData(contentsOf: itemURL as URL) else {
                 self.cancelRequest()
                 return
             }
 
-            self.uploadData(itemData)
+            self.uploadData(data: itemData)
         }
     }
 
@@ -103,9 +103,9 @@ final class ShareViewController: UIViewController {
 
         storeOptions.fileName = fileName
 
-        filestack.store(data, withOptions: storeOptions, progress: { (progress) in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.progressView.setProgress(Float(progress.fractionCompleted), animated: true)
+        filestack?.store(data as Data!, with: storeOptions, progress: { (progress) in
+            DispatchQueue.main.async {
+                self.progressView.setProgress(Float((progress?.fractionCompleted)!), animated: true)
             }
         }) { (blob, error) in
             guard blob != nil else {
@@ -113,30 +113,29 @@ final class ShareViewController: UIViewController {
                 return
             }
 
-            DataStore.createCoreDataBlobFromBlob(blob)
+            DataStore.createCoreDataBlobFromBlob(blob!)
 
-            let pasteboard = UIPasteboard.generalPasteboard()
-            pasteboard.persistent = true
-            pasteboard.string = blob.url
+            let pasteboard = UIPasteboard.general
+            pasteboard.string = blob?.url
 
-            self.dismissViewControllerAnimated(true, completion: {
-                let alert = UIAlertController(title: "Filestack Share", message: "Link has been copied to your clipboard.", preferredStyle: .Alert)
-                let okAction = UIAlertAction(title: "OK", style: .Default, handler: { (action) in
+            self.dismiss(animated: true, completion: {
+                let alert = UIAlertController(title: "Filestack Share", message: "Link has been copied to your clipboard.", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
                     self.finishRequest()
                 })
 
                 alert.addAction(okAction)
-                self.presentViewController(alert, animated: true, completion: nil)
+                self.present(alert, animated: true, completion: nil)
             })
         }
     }
 
     private func cancelRequest() {
         let error = NSError(domain: "filestack.com", code: 0, userInfo: nil)
-        extensionContext?.cancelRequestWithError(error)
+        extensionContext?.cancelRequest(withError: error)
     }
 
     private func finishRequest() {
-        extensionContext?.completeRequestReturningItems([], completionHandler: nil)
+        extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
     }
 }

@@ -272,12 +272,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B2068D1F1CFD857D0029B4AD /* Build configuration list for PBXNativeTarget "FilestackShare" */;
 			buildPhases = (
-				50CDB611A67920A9ADA6B8C3 /* 📦 Check Pods Manifest.lock */,
+				50CDB611A67920A9ADA6B8C3 /* [CP] Check Pods Manifest.lock */,
 				B2068D061CFD857D0029B4AD /* Sources */,
 				B2068D071CFD857D0029B4AD /* Frameworks */,
 				B2068D081CFD857D0029B4AD /* Resources */,
-				4974AFF732BBE9525D4C7A6E /* 📦 Embed Pods Frameworks */,
-				1130A1C76A7A854B17D2FE90 /* 📦 Copy Pods Resources */,
+				4974AFF732BBE9525D4C7A6E /* [CP] Embed Pods Frameworks */,
+				1130A1C76A7A854B17D2FE90 /* [CP] Copy Pods Resources */,
 				B28F7F7D1D2BBAA10006C7C9 /* Embed App Extensions */,
 				B28048D41D3E4B5900169771 /* ShellScript */,
 			);
@@ -295,12 +295,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B28F7F7C1D2BBAA10006C7C9 /* Build configuration list for PBXNativeTarget "ShareExtension" */;
 			buildPhases = (
-				D7021D255E42BE9EEC6EF7AB /* 📦 Check Pods Manifest.lock */,
+				D7021D255E42BE9EEC6EF7AB /* [CP] Check Pods Manifest.lock */,
 				B28F7F6B1D2BBAA10006C7C9 /* Sources */,
 				B28F7F6C1D2BBAA10006C7C9 /* Frameworks */,
 				B28F7F6D1D2BBAA10006C7C9 /* Resources */,
-				822E8664E73880B4775EA1F2 /* 📦 Embed Pods Frameworks */,
-				DF77502928E0E96B554805AE /* 📦 Copy Pods Resources */,
+				DF77502928E0E96B554805AE /* [CP] Copy Pods Resources */,
 				B266CA731D38F7FF0072F740 /* ShellScript */,
 			);
 			buildRules = (
@@ -319,12 +318,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Filestack;
 				TargetAttributes = {
 					B2068D091CFD857D0029B4AD = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = HJDNASAEB8;
+						LastSwiftMigration = 0820;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -334,6 +333,7 @@
 					B28F7F6E1D2BBAA10006C7C9 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = HJDNASAEB8;
+						LastSwiftMigration = 0820;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -384,14 +384,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1130A1C76A7A854B17D2FE90 /* 📦 Copy Pods Resources */ = {
+		1130A1C76A7A854B17D2FE90 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -399,14 +399,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FilestackShare/Pods-FilestackShare-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		4974AFF732BBE9525D4C7A6E /* 📦 Embed Pods Frameworks */ = {
+		4974AFF732BBE9525D4C7A6E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,34 +414,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FilestackShare/Pods-FilestackShare-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		50CDB611A67920A9ADA6B8C3 /* 📦 Check Pods Manifest.lock */ = {
+		50CDB611A67920A9ADA6B8C3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		822E8664E73880B4775EA1F2 /* 📦 Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "📦 Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ShareExtension/Pods-ShareExtension-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		B266CA731D38F7FF0072F740 /* ShellScript */ = {
@@ -470,29 +455,29 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" 56c252b01cdf457a2480299de3a7cdbce8db2eb1 4e1b7c09ce612bbcdbbbcbb1f4b77c27e6725b619d6ba26a9ab389f37dd3ba7b";
 		};
-		D7021D255E42BE9EEC6EF7AB /* 📦 Check Pods Manifest.lock */ = {
+		D7021D255E42BE9EEC6EF7AB /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		DF77502928E0E96B554805AE /* 📦 Copy Pods Resources */ = {
+		DF77502928E0E96B554805AE /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -596,8 +581,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -642,8 +629,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -662,6 +651,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -671,11 +661,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E8111A6036A673EEB31A32F7 /* Pods-FilestackShare.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FilestackShare/FilestackShare.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"COCOAPODS=1",
@@ -687,6 +678,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "FilestackShare/FilestackShare-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -694,11 +686,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E2FE3A076A0847285C3F0D97 /* Pods-FilestackShare.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FilestackShare/FilestackShare.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"COCOAPODS=1",
@@ -709,6 +702,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.filestack.FilestackShare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "FilestackShare/FilestackShare-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -727,6 +721,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.filestack.FilestackShare.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -745,6 +740,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.filestack.FilestackShare.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

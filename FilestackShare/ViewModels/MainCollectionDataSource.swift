@@ -13,8 +13,8 @@ import CoreData
 final class MainCollectionDataSource: NSObject, UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
 
     weak var sourcedController: MainCollectionViewController?
-    private var fetchedResultsController: NSFetchedResultsController!
-    private var noOfFetchedItems: Int!
+    fileprivate var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>!
+    fileprivate var noOfFetchedItems: Int!
 
     func prepareFetchedResultsController() {
         fetchedResultsController = DataStore.fetchedResultsController()
@@ -31,11 +31,11 @@ final class MainCollectionDataSource: NSObject, UICollectionViewDataSource, NSFe
         }
     }
 
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let sections = fetchedResultsController.sections else {
             return 0
         }
@@ -45,9 +45,9 @@ final class MainCollectionDataSource: NSObject, UICollectionViewDataSource, NSFe
         return noOfFetchedItems
     }
 
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("blobCell", forIndexPath: indexPath) as! BlobCollectionViewCell
-        let blob = fetchedResultsController.objectAtIndexPath(indexPath) as? Blob
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "blobCell", for: indexPath) as! BlobCollectionViewCell
+        let blob = fetchedResultsController.object(at: indexPath) as? Blob
 
         guard let unwrBlob = blob else {
             return cell
@@ -56,61 +56,62 @@ final class MainCollectionDataSource: NSObject, UICollectionViewDataSource, NSFe
         cell.imageView?.image = nil
 
         if unwrBlob.isVideo {
-            cell.type = .Video
+            cell.type = .video
         } else if unwrBlob.isFile {
-            cell.type = .File
+            cell.type = .file
         } else {
-            let imageURL = NSURL(string: unwrBlob.thumbURL!)
-            cell.type = .Image
-            cell.imageView?.nk_setImageWith(imageURL!)
+            let imageURL = URL(string: unwrBlob.thumbURL!)
+            cell.type = .image
+            let request = Request(url: imageURL!)
+            Nuke.loadImage(with: request, into: cell.imageView!)
         }
 
         cell.blobLabel?.text = unwrBlob.fileName
-        cell.moreButton?.addTarget(self, action: #selector(presentActionController(_:)), forControlEvents: .TouchUpInside)
+        cell.moreButton?.addTarget(self, action: #selector(presentActionController(_:)), for: .touchUpInside)
         cell.blob = unwrBlob
 
         return cell
     }
 
-    func presentActionController(sender: UIButton) {
+    func presentActionController(_ sender: UIButton) {
         guard let cell = sender.superview as? BlobCollectionViewCell else {
             return
         }
 
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             self.sourcedController?.presentActionControllerForBlob(cell.blob)
         }
     }
 
-    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         let collectionView = sourcedController?.collectionView
 
         collectionView?.performBatchUpdates({
             switch(type) {
-            case .Insert:
-                collectionView?.insertSections(NSIndexSet(index: sectionIndex))
-            case .Delete:
-                collectionView?.deleteSections(NSIndexSet(index: sectionIndex))
+            case .insert:
+                collectionView?.insertSections(IndexSet(integer: sectionIndex))
+            case .delete:
+                collectionView?.deleteSections(IndexSet(integer: sectionIndex))
             default:
                 break
             }
         }, completion: nil)
     }
 
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         let collectionView = sourcedController?.collectionView
 
         collectionView?.performBatchUpdates({
             switch(type) {
-            case .Insert:
-                collectionView?.insertItemsAtIndexPaths([newIndexPath!])
-            case .Delete:
-                collectionView?.deleteItemsAtIndexPaths([indexPath!])
-            case .Update:
-                collectionView?.reloadItemsAtIndexPaths([indexPath!])
-            case .Move:
-                collectionView?.deleteItemsAtIndexPaths([indexPath!])
-                collectionView?.insertItemsAtIndexPaths([newIndexPath!])
+            case .insert:
+                collectionView?.insertItems(at: [newIndexPath!])
+            case .delete:
+                collectionView?.deleteItems(at: [indexPath!])
+            case .update:
+                collectionView?.reloadItems(at: [indexPath!])
+            case .move:
+                collectionView?.deleteItems(at: [indexPath!])
+                collectionView?.insertItems(at: [newIndexPath!])
             }
         }, completion: nil)
     }

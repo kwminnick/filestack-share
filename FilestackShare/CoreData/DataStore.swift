@@ -12,24 +12,24 @@ import FSPicker
 
 final class DataStore: NSObject {
 
-    private static let coreDataStack = CoreDataStack()
+    fileprivate static let coreDataStack = CoreDataStack()
 
-    class func fetchedResultsController() -> NSFetchedResultsController {
+    class func fetchedResultsController() -> NSFetchedResultsController<NSFetchRequestResult> {
         let context = coreDataStack.managedObjectContext
-        let fetchRequest = NSFetchRequest(entityName: "Blob")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blob")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "uploaded", ascending: false)]
 
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
     }
 
-    class func createCoreDataBlobFromBlob(blob: FSBlob) {
+    class func createCoreDataBlobFromBlob(_ blob: FSBlob) {
         let context = coreDataStack.managedObjectContext
-        guard let entity = NSEntityDescription.entityForName("Blob", inManagedObjectContext: context) else {
+        guard let entity = NSEntityDescription.entity(forEntityName: "Blob", in: context) else {
             return
         }
 
-        let cdBlob = Blob(entity: entity, insertIntoManagedObjectContext: context)
-        let fsHandler = blob.url.componentsSeparatedByString("/").last
+        let cdBlob = Blob(entity: entity, insertInto: context)
+        let fsHandler = blob.url.components(separatedBy: "/").last
 
         if let handler = fsHandler {
             cdBlob.thumbURL = "https://process.filestackapi.com/resize=height:250,fit:max/\(handler)"
@@ -39,23 +39,23 @@ final class DataStore: NSObject {
 
         cdBlob.url = blob.url
         cdBlob.fileName = blob.fileName
-        cdBlob.size = blob.size
+        cdBlob.size = blob.size as NSNumber?
         cdBlob.mimeType = blob.mimeType
 
-        if blob.mimeType.containsString("video") {
+        if blob.mimeType.contains("video") {
             cdBlob.isVideo = true
-        } else if !blob.mimeType.containsString("image") {
+        } else if !blob.mimeType.contains("image") {
             cdBlob.isFile = true
         }
 
-        cdBlob.uploaded = NSDate().timeIntervalSince1970
+        cdBlob.uploaded = Date().timeIntervalSince1970 as NSNumber?
         try! context.save()
     }
 
-    class func deleteCoreDataBlob(blob: Blob) {
+    class func deleteCoreDataBlob(_ blob: Blob) {
         let context = coreDataStack.managedObjectContext
 
-        context.deleteObject(blob)
+        context.delete(blob)
         try! context.save()
     }
 
@@ -66,26 +66,26 @@ final class DataStore: NSObject {
 
 final class CoreDataStack {
 
-    lazy var applicationDocumentsDirectory: NSURL = {
-        let url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.FilestackShare")
+    lazy var applicationDocumentsDirectory: URL = {
+        let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.FilestackShare")
         return url!
     }()
 
     lazy var managedObjectModel: NSManagedObjectModel = {
-        let modelURL = NSBundle.mainBundle().URLForResource("FilestackShare", withExtension: "momd")!
-        return NSManagedObjectModel(contentsOfURL: modelURL)!
+        let modelURL = Bundle.main.url(forResource: "FilestackShare", withExtension: "momd")!
+        return NSManagedObjectModel(contentsOf: modelURL)!
     }()
 
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("FilestackShare.sqlite")
+        let url = self.applicationDocumentsDirectory.appendingPathComponent("FilestackShare.sqlite")
         var failureReason = "There was an error creating or loading the application's saved data."
         do {
-            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil)
+            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)
         } catch {
             var dict = [String: AnyObject]()
-            dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
-            dict[NSLocalizedFailureReasonErrorKey] = failureReason
+            dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data" as AnyObject?
+            dict[NSLocalizedFailureReasonErrorKey] = failureReason as AnyObject?
 
             dict[NSUnderlyingErrorKey] = error as NSError
             let wrappedError = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
@@ -98,7 +98,7 @@ final class CoreDataStack {
 
     lazy var managedObjectContext: NSManagedObjectContext = {
         let coordinator = self.persistentStoreCoordinator
-        var managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = coordinator
         return managedObjectContext
     }()

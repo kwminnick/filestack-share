@@ -11,13 +11,13 @@ import Foundation
 extension UIAlertController {
 
     convenience init(message: String) {
-        self.init(title: "", message: message, preferredStyle: .Alert)
-        addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+        self.init(title: "", message: message, preferredStyle: .alert)
+        addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
     }
 
     convenience init(message: String, noButtons: Bool) {
         if noButtons {
-            self.init(title: "", message: message, preferredStyle: .Alert)
+            self.init(title: "", message: message, preferredStyle: .alert)
         } else {
             self.init(message: message)
         }

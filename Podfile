@@ -7,8 +7,8 @@ pod 'FSPicker'
 
 target 'FilestackShare' do
   use_frameworks!
-  pod 'XLActionController'
-  pod 'Nuke'
+  pod 'XLActionController', git:'https://github.com/xmartlabs/XLActionController.git'
+  pod 'Nuke', git:'https://github.com/kean/Nuke.git'
 end
 
 target 'ShareExtension' do
